@@ -55,6 +55,7 @@ struct BuuKien{
 	string sender;
 	string address;
 	int price;
+	int dongia;
 	int mass;
 	DATE time;
 	int status;
@@ -135,16 +136,17 @@ void Read_All_Distance(ifstream &filein,LISTDISTANCE &l){
 }
 
 void DisplayOne(NODE temp){
+
     cout << right << setw(11) << temp->data.code << " | "
 		 << setw(10) << temp->data.item << " | "
 		 << setw(20) << temp->data.sender << " | "
 		 << setw(20) << temp->data.receiver << " | "
 		 << setw(18) << temp->data.address << " | "
-		 << setw(15) << temp->data.price<<" VND" << " | "
+		 << setw(6) << temp->data.price<<" VND" << " | "
  		 << setw(8) << temp->data.mass<<" kg" << " | "
 		 << setfill('0') << setw(2) << temp->data.time.day << "/" << setw(2) << temp->data.time.month << "/" << temp->data.time.year << " | ";
          cout << setfill(' ');
-         cout << setw(20) << temp->data.shipperr << " | ";
+         cout << setw(16) << temp->data.shipperr << " | ";
 		if(temp->data.status==1)
 			cout<< setw(9) << "Da Giao!" << endl;
 		else if(temp->data.status==0) cout<< setw(9) << "Dang Giao!" << endl;
@@ -159,23 +161,23 @@ void Display(LIST l){
                     << setw(20) << "Ten Nguoi Gui" << " | "
                     << setw(20) << "Ten Nguoi Nhan" << " | "
                     << setw(18) << "Dia Diem Giao Hang" << " | "
-                    << setw(19) << "Thanh Tien" << " | "
+                    << setw(10) << "Thanh Tien" << " | "
                     << setw(11) << "Khoi Luong" << " | "
                     << setw(10) << "Ngay Gui" << " | "
-                    << setw(20) << "Shipper"<< " | "
+                    << setw(16) << "Shipper"<< " | "
                  	<< setw(10) << "Tinh Trang" << endl;
-    cout << setfill('-') << setw(176) << "-" << setfill(' ') << endl;
+    cout << setfill('-') << setw(163) << "-" << setfill(' ') << endl;
     while (temp != NULL){
     cout << right << setw(11) << temp->data.code << " | "
 		 << setw(10) << temp->data.item << " | "
 		 << setw(20) << temp->data.sender << " | "
 		 << setw(20) << temp->data.receiver << " | "
 		 << setw(18) << temp->data.address << " | "
- 		 << setw(15) << temp->data.price<<" VND" << " | "
+ 		 << setw(6) << temp->data.price<<" VND" << " | "
 		 << setw(8) << temp->data.mass<<" kg" << " | "
 		 << setfill('0') << setw(2) << temp->data.time.day << "/" << setw(2) << temp->data.time.month << "/" << temp->data.time.year << " | ";
          cout << setfill(' ');
-         cout << setw(20) << temp->data.shipperr << " | ";
+         cout << setw(16) << temp->data.shipperr << " | ";
 		if(temp->data.status==1)
 			cout<< setw(9) << "Da Giao!" << endl;
 		 else if(temp->data.status==0) cout<< setw(9) << "Dang Giao!" << endl;
@@ -254,8 +256,9 @@ BK INPUT(LIST &l,LISTDISTANCE &ld){
 	cout << "Nhap nguoi gui     : ";getline(cin,x.sender);
 	cout << "Nhap nguoi nhan    : ";getline(cin,x.receiver);
 	x.address = Address(x);
+	cout << "Nhap don gia       : ";cin>> x.dongia;
 	cout << "Nhap khoi luong(kg): ";cin >> x.mass;
-	x.price=x.mass*250;
+	x.price=(x.mass*250)+x.dongia;
 	x.shipperr=NguoiGiao(x,x.address,ld);
 	x.time.day = ltm->tm_mday;x.time.month=1+ltm->tm_mon;x.time.year=1900+ltm->tm_year;
 	x.status = 0;
@@ -269,7 +272,7 @@ void Nhap(LIST &l,LISTDISTANCE &ld){
 }
 
 void Save(LIST &l){
-	ofstream fileout; 
+	ofstream fileout; int demdagiao=0,demdanggiao=0,tongtien=0;
 	fileout.open("output.txt", ios::out); 
 	NODE temp = l.head;
 	    		   fileout << setw(5) << "Ma Buu Kien" << " | "
@@ -277,28 +280,33 @@ void Save(LIST &l){
                     << setw(20) << "Ten Nguoi Gui" << " | "
                     << setw(20) << "Ten Nguoi Nhan" << " | "
                     << setw(18) << "Dia Diem Giao Hang" << " | "
-                    << setw(19) << "Thanh Tien" << " | "
+                    << setw(10) << "Thanh Tien" << " | "
                     << setw(11) << "Khoi Luong" << " | "
                     << setw(10) << "Ngay Gui" << " | "
-                    << setw(20) << "Shipper" << " | "
+                    << setw(16) << "Shipper" << " | "
                     << setw(10) << "Tinh Trang" << endl;
-    fileout << setfill('-') << setw(176) << "-" << setfill(' ') << endl;
+    fileout << setfill('-') << setw(163) << "-" << setfill(' ') << endl;
 	while(temp != NULL){
  fileout << right << setw(11) << temp->data.code << " | "
 		 << setw(10) << temp->data.item << " | "
 		 << setw(20) << temp->data.sender << " | "
 		 << setw(20) << temp->data.receiver << " | "
 		 << setw(18) << temp->data.address << " | "
- 		 << setw(15) << temp->data.price<<" VND" << " | "
+ 		 << setw(6) << temp->data.price<<" VND" << " | "
 		 << setw(8) << temp->data.mass<<" kg" << " | "
 		 << setfill('0') << setw(2) << temp->data.time.day << "/" << setw(2) << temp->data.time.month << "/" << temp->data.time.year << " | ";
          fileout << setfill(' ');
-         fileout << setw(20) << temp->data.shipperr << " | ";
-		if(temp->data.status==1)
-			fileout<< setw(9) << "Da Giao!" << endl;
-	   	 else if(temp->data.status==0) fileout<< setw(9) << "Dang Giao!" << endl;
+         fileout << setw(16) << temp->data.shipperr << " | ";
+		if(temp->data.status==1){
+			fileout<< setw(9) << "Da Giao!" << endl;demdagiao++;tongtien+= temp->data.price;}
+	   	 else if(temp->data.status==0) 
+			{fileout<< setw(9) << "Dang Giao!" << endl;demdanggiao++;}
 	temp = temp->next;
 	}
+	fileout <<endl<< "THONG KE"<<endl;
+	fileout<< "Da giao  : "<<demdagiao<<endl<<endl;
+	fileout <<"Dang giao: "<<demdanggiao<<endl<<endl;
+	fileout<< "Tong so tien da nhan : "<<tongtien<<" VND"<<endl;
 	fileout.close();
 }
 
@@ -322,12 +330,12 @@ void PhanLoai(LIST l, int x) {
                     << setw(20) << "Ten Nguoi Gui" << " | "
                     << setw(20) << "Ten Nguoi Nhan" << " | "
                     << setw(18) << "Dia Diem Giao Hang" << " | "
-                    << setw(19) << "Thanh Tien" << " | "
+                    << setw(10) << "Thanh Tien" << " | "
                     << setw(11) << "Khoi Luong" << " | "
                     << setw(10) << "Ngay Gui" << " | "
-                    << setw(20) << "Shipper"<< " | "
+                    << setw(16) << "Shipper"<< " | "
                     << setw(10) << "Tinh Trang" << endl;
-    cout << setfill('-') << setw(176) << "-" << setfill(' ') << endl;
+    cout << setfill('-') << setw(163) << "-" << setfill(' ') << endl;
 				DisplayOne(temp);find=true;}temp=temp->next;
     			}
 			if(!find) cout << "Khong tim thay buu kien co TRANG THAI : Da Giao!"<<endl;}
@@ -341,12 +349,12 @@ void PhanLoai(LIST l, int x) {
                     << setw(20) << "Ten Nguoi Gui" << " | "
                     << setw(20) << "Ten Nguoi Nhan" << " | "
                     << setw(18) << "Dia Diem Giao Hang" << " | "
-                    << setw(19) << "Thanh Tien" << " | "
+                    << setw(10) << "Thanh Tien" << " | "
                     << setw(11) << "Khoi Luong" << " | "
                     << setw(10) << "Ngay Gui" << " | "
                     << setw(20) << "Shipper"<< " | "
                     << setw(10) << "Tinh Trang" << endl;
-    cout << setfill('-') << setw(176) << "-" << setfill(' ') << endl;
+    cout << setfill('-') << setw(163) << "-" << setfill(' ') << endl;
 				DisplayOne(temp);find=true;}temp=temp->next;
     			}
 			if(!find) cout << "Khong tim thay buu kien co TRANG THAI : Dang Giao!"<<endl;}
@@ -390,7 +398,7 @@ void ChinhSua(LIST &l,int x){
             case 5:
                 cout << "Nhap khoi luong moi: ";
                 cin >> temp->data.mass;
-                temp->data.price = temp->data.mass * 250;
+                temp->data.price = (temp->data.mass * 250)+temp->data.dongia;
                 break;
             default:
                 cout << "Lua chon khong hop le!" << endl;
@@ -419,6 +427,89 @@ void ThayDoi(LIST &l,int xy){
 		}
 }
 }
+
+void TimKiem(LIST &l){
+//	NODE temp = l.head;
+//	while(temp!=NULL && temp->data.code!=x){
+//		temp=temp->next;
+//	}
+//	if(temp==NULL) cout << "Khong tim thay buu kien co ma "<<x<<"."<<endl;
+//	else{
+//			   		   cout << setw(5) << "Ma Buu Kien" << " | "
+//                    << setw(10) << "Ten Hang" << " | "
+//                    << setw(20) << "Ten Nguoi Gui" << " | "
+//                    << setw(20) << "Ten Nguoi Nhan" << " | "
+//                    << setw(18) << "Dia Diem Giao Hang" << " | "
+//                    << setw(10) << "Thanh Tien" << " | "
+//                    << setw(11) << "Khoi Luong" << " | "
+//                    << setw(10) << "Ngay Gui" << " | "
+//                    << setw(20) << "Shipper"<< " | "
+//                 	<< setw(10) << "Tinh Trang" << endl;
+//    cout << setfill('-') << setw(176) << "-" << setfill(' ') << endl;
+//		DisplayOne(temp);
+//	}
+	NODE temp = l.head;NODE tempp = l.head;NODE temppp=l.head;int demHC=0,demLC=0,demTK=0,demCL=0,demST=0,demNHS=0,demHV=0,demHS=0,option;string address;
+	while(temp!=NULL){
+		if(temp->data.address=="Hai Chau") demHC++;
+		else if(temp->data.address=="Lien Chieu") demLC++;
+		else if(temp->data.address=="Thanh Khe") demTK++;
+		else if(temp->data.address=="Cam Le") demCL++;
+		else if(temp->data.address=="Son Tra") demST++;
+		else if(temp->data.address=="Ngu Hanh Son") demNHS++;
+		else if(temp->data.address=="Hoa Vang") demHV++;
+		else if(temp->data.address=="Hoang Sa") demHS++;
+		temp=temp->next;
+	}
+		
+		cout << "Danh sach cac buu kien o cac QUAN , HUYEN : "<<endl;
+		cout << "1. Hai Chau     : " << demHC << " buu kien"<<endl<<endl;
+		cout << "2. Lien Chieu   : " << demLC << " buu kien"<<endl<<endl;
+		cout << "3. Thanh Khe    : " << demTK << " buu kien"<<endl<<endl;
+		cout << "4. Cam Le       : " << demCL << " buu kien"<<endl<<endl;
+		cout << "5. Son Tra      : " << demST << " buu kien"<<endl<<endl;
+		cout << "6. Ngu Hanh Son : " << demNHS << " buu kien"<<endl<<endl;
+		cout << "7. Hoa Vang     : " << demHV << " buu kien"<<endl<<endl;
+		cout << "8. Hoang Sa     : " << demHS << " buu kien"<<endl<<endl;
+		bool check =false;
+		while(!check){
+		cout << "Nhap STT de xem chi tiet cac don hang : ";cin>>option;
+		switch(option){
+		case 1: address="Hai Chau";check=true;break;
+		case 2: address="Lien Chieu";check=true;break;
+		case 3: address="Thanh Khe";check=true;break;
+		case 4: address="Cam Le";check=true;break;
+		case 5: address="Son Tra";check=true;break;
+		case 6: address="Ngu Hanh Son";check=true;break;
+		case 7: address="Hoa Vang";check=true;break;
+		case 8: address="Hoang Sa";check=true;break;
+		default:cout<<"Vui long nhap dung STT!"<<endl;
+	}
+}
+	if((option==1 && demHC==0) || (option==2 && demLC==0) || (option==3 && demTK==0) || (option==4 && demCL==0) || (option==5 && demST==0) || (option==6 && demNHS==0) || (option==7 && demHV==0) || (option==8 && demHS==0))
+	cout << "Khong co buu kien nao o khu vuc nay!!"<<endl<<endl;
+	else{
+	
+	cout << setw(5) << "Ma Buu Kien" << " | "
+                    << setw(10) << "Ten Hang" << " | "
+                    << setw(20) << "Ten Nguoi Gui" << " | "
+                    << setw(20) << "Ten Nguoi Nhan" << " | "
+                    << setw(18) << "Dia Diem Giao Hang" << " | "
+                    << setw(10) << "Thanh Tien" << " | "
+                    << setw(11) << "Khoi Luong" << " | "
+                    << setw(10) << "Ngay Gui" << " | "
+                    << setw(16) << "Shipper"<< " | "
+                 	<< setw(10) << "Tinh Trang" << endl;
+    cout << setfill('-') << setw(163) << "-" << setfill(' ') << endl;
+
+		while(tempp!=NULL){
+			if(tempp->data.address==address)
+			DisplayOne(tempp);
+			tempp=tempp->next;
+		}
+}
+}
+
+
 void OPTION(){
 	LIST l;InitListBK(l);
 	LISTDISTANCE ld;InitListDistance(ld);
@@ -462,13 +553,15 @@ void OPTION(){
 				}
 				break;
 			case 4:
-				int option4;
-				cout << "----------- LUA CHON TIM KIEM THEO -----------"<<endl;
-				cout << "              1.TEN NGUOI GUI."<<endl;
-				cout << "              2.TEN NGUOI NHAN."<<endl;
-				cout << "              3.MA BUU KIEN."<<endl;
-				cout << "              4.Shipper"<<endl;
-				cout<<  "Nhap lua chon : ";cin>>option4;
+//				int option4;
+//				if(CHECK(l)){
+//				
+//				cout<<  "Nhap ma buu kien can tim : ";cin>>option4;
+//				
+//				TimKiem(l,option4);}
+				if(CHECK(l)==true){
+					TimKiem(l);
+				}
 				break;
 			case 5:
 				if(CHECK(l)==true){
