@@ -1,0 +1,2 @@
+999999,may tinh,Ho Khang Hy,012345678,Nguyen Chien,123134124312,Hue,123000,13,02/03/2023,1
+123456,ban ghe,Nguyen Le Minh Chien,0768497979,Chung lon,123456789,Da Nang,10000,25,11/03/2024,0
